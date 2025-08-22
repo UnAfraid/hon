@@ -15,10 +15,6 @@ jobs:
       matrix:
         include:
           - home-assistant: "2025.8.3"
-            python-version: "3.11"
-          - home-assistant: "2025.8.3"
-            python-version: "3.12"
-          - home-assistant: "2025.8.3"
             python-version: "3.13"
 
     steps:
