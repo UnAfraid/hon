@@ -56,7 +56,7 @@ BUTTONS: dict[str, tuple[ButtonEntityDescription, ...]] = {
 
 
 async def async_setup_entry(
-        hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
+    hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
 ) -> None:
     entities: list[HonButtonType] = []
     for device in hass.data[DOMAIN][entry.unique_id]["hon"].appliances:
@@ -80,15 +80,15 @@ class HonButtonEntity(HonEntity, ButtonEntity):
     def available(self) -> bool:
         """Return True if entity is available."""
         return (
-                super().available
-                and int(self._device.get("remoteCtrValid", "1")) == 1
-                and self._device.connection
+            super().available
+            and int(self._device.get("remoteCtrValid", "1")) == 1
+            and self._device.connection
         )
 
 
 class HonDeviceInfo(HonEntity, ButtonEntity):
     def __init__(
-            self, hass: HomeAssistant, entry: ConfigEntry, device: HonAppliance
+        self, hass: HomeAssistant, entry: ConfigEntry, device: HonAppliance
     ) -> None:
         super().__init__(hass, entry, device)
 
@@ -103,12 +103,12 @@ class HonDeviceInfo(HonEntity, ButtonEntity):
         persistent_notification.create(
             self._hass, f"````\n```\n{self._device.diagnose}\n```\n````", title
         )
-        _LOGGER.info(self._device.diagnose.replace(" ", "\u200B "))
+        _LOGGER.info(self._device.diagnose.replace(" ", "\u200b "))
 
 
 class HonDataArchive(HonEntity, ButtonEntity):
     def __init__(
-            self, hass: HomeAssistant, entry: ConfigEntry, device: HonAppliance
+        self, hass: HomeAssistant, entry: ConfigEntry, device: HonAppliance
     ) -> None:
         super().__init__(hass, entry, device)
 

@@ -316,7 +316,7 @@ BINARY_SENSORS["WD"] = unique_entities(BINARY_SENSORS["WM"], BINARY_SENSORS["TD"
 
 
 async def async_setup_entry(
-        hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
+    hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
 ) -> None:
     entities = []
     for device in hass.data[DOMAIN][entry.unique_id]["hon"].appliances:
@@ -341,8 +341,8 @@ class HonBinarySensorEntity(HonEntity, BinarySensorEntity):
     @callback
     def _handle_coordinator_update(self, update: bool = True) -> None:
         self._attr_native_value = (
-                self._device.get(self.entity_description.key, "")
-                == self.entity_description.on_value
+            self._device.get(self.entity_description.key, "")
+            == self.entity_description.on_value
         )
         if update:
             self.async_write_ha_state()

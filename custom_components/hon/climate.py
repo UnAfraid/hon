@@ -103,7 +103,7 @@ CLIMATES: dict[
 
 
 async def async_setup_entry(
-        hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
+    hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
 ) -> None:
     entities = []
     entity: HonClimateEntity | HonACClimateEntity
@@ -128,11 +128,11 @@ class HonACClimateEntity(HonEntity, ClimateEntity):
     _enable_turn_on_off_backwards_compatibility = False
 
     def __init__(
-            self,
-            hass: HomeAssistant,
-            entry: ConfigEntry,
-            device: HonAppliance,
-            description: HonACClimateEntityDescription,
+        self,
+        hass: HomeAssistant,
+        entry: ConfigEntry,
+        device: HonAppliance,
+        description: HonACClimateEntityDescription,
     ) -> None:
         super().__init__(hass, entry, device, description)
 
@@ -152,12 +152,12 @@ class HonACClimateEntity(HonEntity, ClimateEntity):
             SWING_BOTH,
         ]
         self._attr_supported_features = (
-                ClimateEntityFeature.TURN_ON
-                | ClimateEntityFeature.TURN_OFF
-                | ClimateEntityFeature.TARGET_TEMPERATURE
-                | ClimateEntityFeature.FAN_MODE
-                | ClimateEntityFeature.SWING_MODE
-                | ClimateEntityFeature.PRESET_MODE
+            ClimateEntityFeature.TURN_ON
+            | ClimateEntityFeature.TURN_OFF
+            | ClimateEntityFeature.TARGET_TEMPERATURE
+            | ClimateEntityFeature.FAN_MODE
+            | ClimateEntityFeature.SWING_MODE
+            | ClimateEntityFeature.PRESET_MODE
         )
 
         self._handle_coordinator_update(update=False)
@@ -297,16 +297,16 @@ class HonClimateEntity(HonEntity, ClimateEntity):
     _enable_turn_on_off_backwards_compatibility = False
 
     def __init__(
-            self,
-            hass: HomeAssistant,
-            entry: ConfigEntry,
-            device: HonAppliance,
-            description: HonClimateEntityDescription,
+        self,
+        hass: HomeAssistant,
+        entry: ConfigEntry,
+        device: HonAppliance,
+        description: HonClimateEntityDescription,
     ) -> None:
         super().__init__(hass, entry, device, description)
 
         self._attr_supported_features = (
-                ClimateEntityFeature.TURN_ON | ClimateEntityFeature.TARGET_TEMPERATURE
+            ClimateEntityFeature.TURN_ON | ClimateEntityFeature.TARGET_TEMPERATURE
         )
 
         self._attr_temperature_unit = UnitOfTemperature.CELSIUS
@@ -324,7 +324,7 @@ class HonClimateEntity(HonEntity, ClimateEntity):
             if mode not in data.parameters["program"].values:
                 continue
             if (zone := data.parameters.get("zone")) and isinstance(
-                    self.entity_description.name, str
+                self.entity_description.name, str
             ):
                 if self.entity_description.name.lower() in zone.values:
                     modes.append(mode)

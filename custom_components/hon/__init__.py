@@ -37,6 +37,7 @@ def make_threadsafe_callback(
 
     return wrapper
 
+
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     session = aiohttp_client.async_get_clientsession(hass)
     if (config_dir := hass.config.config_dir) is None:
@@ -59,7 +60,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         hass, _LOGGER, name=DOMAIN
     )
 
-    hon.subscribe_updates(make_threadsafe_callback(hass, coordinator.async_set_updated_data))
+    hon.subscribe_updates(
+        make_threadsafe_callback(hass, coordinator.async_set_updated_data)
+    )
 
     hass.data.setdefault(DOMAIN, {})
     hass.data[DOMAIN][entry.unique_id] = {"hon": hon, "coordinator": coordinator}
