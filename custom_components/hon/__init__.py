@@ -2,11 +2,11 @@ import logging
 from pathlib import Path
 from typing import Any
 
-import voluptuous as vol  # type: ignore[import-untyped]
+import voluptuous as vol
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_EMAIL, CONF_PASSWORD
 from homeassistant.helpers import config_validation as cv, aiohttp_client
-from homeassistant.core import HomeAssistant
+from homeassistant.core import HomeAssistant, Callable
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 from pyhon import Hon
 
@@ -26,6 +26,16 @@ CONFIG_SCHEMA = vol.Schema(
     extra=vol.ALLOW_EXTRA,
 )
 
+
+def make_threadsafe_callback(
+    hass: HomeAssistant, callback: Callable[..., None]
+) -> Callable[..., None]:
+    """Wrap a callback so it's always called inside the event loop thread."""
+
+    def wrapper(*args: Any, **kwargs: Any) -> None:
+        hass.loop.call_soon_threadsafe(callback, *args, **kwargs)
+
+    return wrapper
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     session = aiohttp_client.async_get_clientsession(hass)
@@ -48,10 +58,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     coordinator: DataUpdateCoordinator[dict[str, Any]] = DataUpdateCoordinator(
         hass, _LOGGER, name=DOMAIN
     )
-    def make_threadsafe_callback(hass, callback):
-        def wrapper(*args, **kwargs):
-            hass.loop.call_soon_threadsafe(callback, *args, **kwargs)
-        return wrapper
+
     hon.subscribe_updates(make_threadsafe_callback(hass, coordinator.async_set_updated_data))
 
     hass.data.setdefault(DOMAIN, {})
